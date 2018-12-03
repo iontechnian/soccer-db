@@ -9,6 +9,9 @@
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false
   },
   "include": [
     "src/**/*.ts"

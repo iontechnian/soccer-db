@@ -16,6 +16,7 @@ class User extends Typegoose {
   username: string;
 
   @prop({
+    required: true,
     unique: true,
     validate: {
       validator: val => isEmail(val),
@@ -57,7 +58,8 @@ class User extends Typegoose {
         process.env.JWT_SECRET as string,
         {
           expiresIn: '30d',
-        });
+        },
+      );
     } catch (e) {
       throw e;
     }

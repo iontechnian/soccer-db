@@ -2,7 +2,9 @@ import * as express from 'express';
 import * as bodyparser from 'body-parser';
 import * as cors from 'cors';
 import * as mongoose from 'mongoose';
+import * as ExpressGraphQL from 'express-graphql';
 
+import schema from './schema';
 import routes from './routes';
 
 mongoose.connect(
@@ -25,6 +27,7 @@ app.use(
 );
 app.use(bodyparser.json({ limit: '1mb' }));
 
+app.use(ExpressGraphQL(schema));
 app.use(routes);
 
 app.listen(process.env.PORT, () => {

@@ -9,8 +9,7 @@ import routes from './routes';
 
 mongoose.connect(
   process.env.DB_URI as string,
-  { useNewUrlParser: true,
-    useCreateIndex: true },
+  { useNewUrlParser: true, useCreateIndex: true },
 );
 
 require('./configs/passport');

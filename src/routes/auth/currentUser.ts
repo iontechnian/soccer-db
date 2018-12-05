@@ -5,11 +5,9 @@ import { InstanceType } from 'typegoose';
 
 const app = Router();
 
-app.get('/',
-    withAuth,
-    (req, res) => {
-      const user = req.user as InstanceType<User>;
-      return res.json({ success: true, message: user.getUserSafe() });
-    });
+app.get('/', withAuth, (req, res) => {
+  const user = req.user as InstanceType<User>;
+  return res.json({ success: true, message: user.getUserSafe() });
+});
 
 export default app;

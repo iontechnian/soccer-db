@@ -1,8 +1,18 @@
 import { Options, OptionsData } from 'express-graphql';
-import { Request } from 'express';
+import { Request, Router } from 'express';
+import { buildSchema } from 'type-graphql';
 
-const options: OptionsData = {
-  schema: null as any,
-};
+import PlayerResolver from './resolvers/PlayerResolver';
 
-export default options;
+export default async function () {
+  const schema = await buildSchema({
+    resolvers: [PlayerResolver],
+  });
+
+  const options: OptionsData = {
+    schema,
+    graphiql: true,
+  };
+
+  return options;
+}

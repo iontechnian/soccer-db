@@ -1,5 +1,6 @@
 import { Options, OptionsData } from 'express-graphql';
 import { Request, Router } from 'express';
+import 'reflect-metadata';
 import { buildSchema } from 'type-graphql';
 
 import PlayerResolver from './resolvers/PlayerResolver';

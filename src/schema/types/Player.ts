@@ -1,6 +1,6 @@
 import { ObjectType, registerEnumType, Field, Int, ID } from 'type-graphql';
 
-enum Role {
+export enum Role {
   CAPTAIN = 'captain',
   PLAYER = 'player',
 }

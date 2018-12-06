@@ -2,7 +2,7 @@ import { Resolver, Query, Arg, Mutation } from 'type-graphql';
 import Player from '../types/Player';
 
 import { PlayerModel } from '../../models';
-import PlayerInput, { PlayerInputOptional } from './PlayerInput';
+import PlayerInput, { PlayerInputOptional } from '../inputs/PlayerInput';
 
 @Resolver(Player)
 class PlayerResolver {
@@ -37,7 +37,7 @@ class PlayerResolver {
   @Mutation(returns => Player)
   async updatePlayer(@Arg('id') id: string, @Arg('player') player: PlayerInputOptional) {
     try {
-      return await PlayerModel.findByIdAndUpdate(id, { $set: player });
+      return await PlayerModel.findOneAndUpdate({ _id: id }, { $set: player });
     } catch (e) {
       throw e;
     }

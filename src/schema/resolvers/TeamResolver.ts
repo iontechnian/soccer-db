@@ -51,3 +51,5 @@ class TeamResolver {
     }
   }
 }
+
+export default TeamResolver;

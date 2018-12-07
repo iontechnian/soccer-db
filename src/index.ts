@@ -26,8 +26,8 @@ app.use(
 );
 app.use(bodyparser.json({ limit: '1mb' }));
 
-app.use(ExpressGraphQL(schema));
 app.use(routes);
+app.use(ExpressGraphQL(schema));
 
 app.listen(process.env.PORT, () => {
   console.log('Express Ready');

@@ -10,7 +10,7 @@ registerEnumType(Role, {
 });
 
 @ObjectType()
-class Player {
+class PlayerType {
   @Field(type => ID)
   id: string;
 
@@ -30,4 +30,4 @@ class Player {
   role: Role;
 }
 
-export default Player;
+export default PlayerType;

@@ -1,11 +1,14 @@
-import { Resolver, Query, Arg, Mutation } from 'type-graphql';
-import Team from '../types/Team';
-import { TeamModel } from '../../models';
+import { Resolver, Query, Arg, Mutation, ResolverInterface, FieldResolver, Root } from 'type-graphql';
+import TeamType from '../types/TeamType';
+import Team from '../../models/definitions/Team';
+import { TeamModel, PlayerModel } from '../../models';
 import TeamInput, { TeamInputOptional } from '../inputs/TeamInput';
+import PlayerType from '../types/PlayerType';
+import { InstanceType } from 'typegoose';
 
-@Resolver(Team)
+@Resolver(TeamType)
 class TeamResolver {
-  @Query(returns => Team)
+  @Query(returns => TeamType)
   async team(@Arg('id') id: string) {
     try {
       return await TeamModel.findById(id);
@@ -14,7 +17,7 @@ class TeamResolver {
     }
   }
 
-  @Query(returns => [Team])
+  @Query(returns => [TeamType])
   async teams() {
     try {
       return await TeamModel.find({});
@@ -23,7 +26,7 @@ class TeamResolver {
     }
   }
 
-  @Mutation(returns => Team)
+  @Mutation(returns => TeamType)
   async addTeam(@Arg('team') team: TeamInput) {
     try {
       const newTeam = new TeamModel(team);
@@ -33,19 +36,55 @@ class TeamResolver {
     }
   }
 
-  @Mutation(returns => Team)
+  @Mutation(returns => TeamType)
   async updateTeam(@Arg('id') id: string, @Arg('team') team: TeamInputOptional) {
     try {
-      return await TeamModel.findOneAndUpdate({ _id: id }, { $set: team });
+      return await TeamModel.findAndUpdate(id, { $set: team });
     } catch (e) {
       throw e;
     }
   }
 
-  @Mutation(returns => Team)
+  @Mutation(returns => TeamType)
   async deleteTeam(@Arg('id') id: string) {
     try {
       return await TeamModel.findByIdAndDelete(id);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  @Mutation(returns => TeamType)
+  async addPlayerToTeam(@Arg('teamId') teamId: string, @Arg('playerId') playerId: string) {
+    try {
+      return await TeamModel.findAndUpdate(teamId, { $push: { players: playerId } });
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  @Mutation(returns => TeamType)
+  async removePlayerFromTeam(@Arg('teamId') teamId: string, @Arg('playerId') playerId: string) {
+    try {
+      return await TeamModel.findAndUpdate(teamId, { $pull: { players: playerId } });
+    } catch (e) {
+
+    }
+  }
+
+  @FieldResolver()
+  async captain(@Root() team: InstanceType<Team>): Promise<PlayerType> {
+    try {
+      return await PlayerModel.findById(team.captain) as PlayerType;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  @FieldResolver()
+  async players(@Root() team: InstanceType<Team>): Promise<PlayerType[]> {
+    try {
+      return await PlayerModel.find({ _id: { $in: team.players } }) as PlayerType[];
     } catch (e) {
       throw e;
     }

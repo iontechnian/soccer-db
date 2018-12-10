@@ -1,8 +1,8 @@
 import { InputType, Field, ID, Int } from 'type-graphql';
 
-import Team from '../types/Team';
+import TeamType from '../types/TeamType';
 import PlayerInput from './PlayerInput';
-import Player from '../types/Player';
+import PlayerType from '../types/PlayerType';
 
 @InputType()
 class TeamInput {
@@ -14,24 +14,18 @@ class TeamInput {
 
   @Field()
   captain: string;
-
-  @Field()
-  players: string[];
 }
 
 @InputType()
-export class TeamInputOptional implements Partial<Team> {
+export class TeamInputOptional {
   @Field({ nullable: true })
   name: string;
 
   @Field({ nullable: true })
   photo: string;
 
-  @Field(type => PlayerInput, { nullable: true })
-  captain: Player;
-
-  @Field(type => [PlayerInput], { nullable: true })
-  players: Player[];
+  @Field({ nullable: true })
+  captain: string;
 }
 
 export default TeamInput;

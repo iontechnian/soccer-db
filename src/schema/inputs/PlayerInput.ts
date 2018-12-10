@@ -1,9 +1,9 @@
 import { InputType, Field, ID, Int } from 'type-graphql';
 
-import Player, { Role } from '../types/Player';
+import PlayerType, { Role } from '../types/PlayerType';
 
 @InputType()
-class PlayerInput implements Partial<Player> {
+class PlayerInput implements Partial<PlayerType> {
   @Field()
   firstName: string;
 
@@ -21,7 +21,7 @@ class PlayerInput implements Partial<Player> {
 }
 
 @InputType()
-export class PlayerInputOptional implements Partial<Player> {
+export class PlayerInputOptional implements Partial<PlayerType> {
   @Field({ nullable: true })
   firstName: string;
 

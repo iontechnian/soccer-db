@@ -1,8 +1,11 @@
-import { Resolver, Query, Arg, Mutation } from 'type-graphql';
+import { Resolver, Query, Arg, Mutation, FieldResolver, Root } from 'type-graphql';
 import PlayerType from '../types/PlayerType';
 
-import { PlayerModel } from '../../models';
+import { PlayerModel, TeamModel } from '../../models';
 import PlayerInput, { PlayerInputOptional } from '../inputs/PlayerInput';
+import Player from '../../models/definitions/Player';
+import { InstanceType } from 'typegoose';
+import TeamType from '../types/TeamType';
 
 @Resolver(PlayerType)
 class PlayerResolver {
@@ -37,7 +40,7 @@ class PlayerResolver {
   @Mutation(returns => PlayerType)
   async updatePlayer(@Arg('id') id: string, @Arg('player') player: PlayerInputOptional) {
     try {
-      return await PlayerModel.findOneAndUpdate({ _id: id }, { $set: player });
+      return await PlayerModel.findAndUpdate(id, { $set: player });
     } catch (e) {
       throw e;
     }
@@ -46,7 +49,20 @@ class PlayerResolver {
   @Mutation(returns => PlayerType)
   async deletePlayer(@Arg('id') id: string) {
     try {
+      const player = (await PlayerModel.findById(id)) as InstanceType<Player>;
+      if (player.team && player.team !== '') {
+        await TeamModel.findAndUpdate(player.team, { $pull: { players: id } });
+      }
       return await PlayerModel.findByIdAndDelete(id);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  @FieldResolver()
+  async team(@Root() player: InstanceType<Player>): Promise<TeamType> {
+    try {
+      return ((await TeamModel.findOne({ _id: player.team })) as unknown) as TeamType;
     } catch (e) {
       throw e;
     }

@@ -1,4 +1,5 @@
 import { ObjectType, registerEnumType, Field, Int, ID } from 'type-graphql';
+import TeamType from './TeamType';
 
 export enum Role {
   CAPTAIN = 'captain',
@@ -28,6 +29,9 @@ class PlayerType {
 
   @Field(type => Role)
   role: Role;
+
+  @Field(type => TeamType, { nullable: true })
+  team: TeamType;
 }
 
 export default PlayerType;

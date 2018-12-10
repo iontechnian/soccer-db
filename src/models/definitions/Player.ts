@@ -1,4 +1,5 @@
-import { Typegoose, prop } from 'typegoose';
+import { Typegoose, prop, staticMethod, ModelType, Ref } from 'typegoose';
+import Team from './Team';
 
 enum Role {
   CAPTAIN = 'captain',
@@ -20,6 +21,18 @@ class Player extends Typegoose {
 
   @prop({ required: true, enum: Role })
   role: Role;
+
+  @prop()
+  team?: string;
+
+  @staticMethod
+  static async findAndUpdate(this: ModelType<Player>, _id: string, update: any) {
+    try {
+      return await this.findOneAndUpdate({ _id }, update, { new: true });
+    } catch (e) {
+      throw e;
+    }
+  }
 }
 
 export default Player;

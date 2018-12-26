@@ -4,7 +4,8 @@ import { UserModel } from '../../models';
 
 const app = Router();
 
-app.post('/',
+app.post(
+  '/',
   requires({ body: ['firstName', 'lastName', 'email', 'username', 'password'] }),
   async (req, res) => {
     const { firstName, lastName, email, username, password } = req.body;
